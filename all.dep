@@ -1,0 +1,229 @@
+$(LIBDIR)/libsmeagol.a : hsleads.o dmbk.o hsl.o hslk.o pasbias.o Interfaces.o mpi.o mpi__include.o setgfelements.o negfk.o mnegfcoop.o keldysh.o rho_boundary.o negfk_subs.o UpdateRho.o SelfEnergies.o BoundStates.o ComputeULR.o CurrentDistribution.o EnergyGrid.o PDOS.o RhoSingleLead.o SetBoundaryElements.o SetBoundaryElements1.o SetBoundaryElements2.o SigmaFourier.o SigmaMethod1.o TransmissionDecomposition.o TransmissionDecompositionRemove.o current.o eigenvalues.o eiofe.o mrgrnk.o negfmod.o noise_svd.o rhoG_reduce.o sigma.o sorthalf.o transm.o writematrix.o writesigmagf.o Constants.o MatrixUtil.o MatrixUtilOMP.o MatrixUtilsSubs.o Types.o Useful.o ZeemanBfield.o loe.o empty_subs.o Gutenberg.o Inverse.o ON_Boundstates.o ON_Interface.o Partition.o ReadData.o gaucheb.o gauleg.o precision.o sys.o atomlist.o ionew.o io.o f77flush.o parallel.o memory.o paste.o atmfuncs.o leqi.o timer.o scissor.o fdf.o IO_SXDHE.o Stop_Negf.o emtg.o Negf_Interface.o convertmatrix_NEGFSerialK.o convertmatrix_NEGFSerial.o convertmatrix_NEGFParallel.o convertmatrix_BaseParallelK.o convertmatrix.o boundary_elements.o RhoPartialKNEGFToRho.o RhoNEGFToRhoImaginary.o RhoNEGFToRho.o RhoNEGFKToRho.o MergeRhoK.o CurrentDistributionMatrix.o XML_EMPDOS.o meshvars.o mpi_negf.o read_efbs.o rotateDM.o
+
+hsleads.o : hsleads.F mpi_siesta.mod negfmod.mod scissoroperator.mod
+
+dmbk.o : dmbk.f ionew.mod
+
+hsl.o : hsl.f sys.mod
+
+hslk.o : hslk.f sys.mod
+
+pasbias.o : pasbias.f 
+
+mpi__integer_v.mod : Interfaces.f90 Interfaces.o mpi__include.mod
+Interfaces.o : Interfaces.f90 mpi__include.mod
+
+mpi_siesta.mod : mpi.F mpi.o $(SRCDIR)/MPI/V_S.uses $(SRCDIR)/MPI/VS.uses mpi__include.mod mpi__integer_v.mod
+mpi.o : mpi.F $(SRCDIR)/MPI/V_S.uses $(SRCDIR)/MPI/VS.uses mpi__include.mod mpi__integer_v.mod
+
+mpi__include.mod : mpi__include.f90 mpi__include.o 
+mpi__include.o : mpi__include.f90 
+
+setgfelements.o : setgfelements.F90 mtypes.mod negfmod.mod scissoroperator.mod
+
+negfk.o : negfk.F $(SRCDIR)/NEGF/negfk_include.h mtypes.mod sigma.mod mboundstates.mod mmatrixutil.mod scissoroperator.mod precision.mod mmpi_negf.mod mcurrentdistribution.mod negfmod.mod menergygrid.mod
+
+negfcoop.mod : mnegfcoop.F90 mnegfcoop.o mtypes.mod fdf.mod atomlist.mod mpi_siesta.mod
+mnegfcoop.o : mnegfcoop.F90 mtypes.mod fdf.mod atomlist.mod mpi_siesta.mod
+
+keldysh.o : keldysh.F $(SRCDIR)/NEGF/const2.h mtypes.mod mmatrixutilomp.mod sigma.mod mboundstates.mod mmatrixutil.mod mimpuritysolver.mod scissoroperator.mod precision.mod mmpi_negf.mod negfmod.mod monboundstates.mod moninterface.mod msigmamethod1.mod menergygrid.mod
+
+rho_boundary.o : rho_boundary.F90 
+
+negfk_subs.o : negfk_subs.F90 $(SRCDIR)/NEGF/const2.h negfmod.mod sigma.mod mmpi_negf.mod
+
+UpdateRho.o : UpdateRho.F90 mtypes.mod mmatrixutil.mod
+
+mselfenergies.mod : SelfEnergies.F90 SelfEnergies.o mtypes.mod msigmafourier.mod mcomputeulr.mod mconstants.mod negfmod.mod msigmamethod1.mod
+SelfEnergies.o : SelfEnergies.F90 mtypes.mod msigmafourier.mod mcomputeulr.mod mconstants.mod negfmod.mod msigmamethod1.mod
+
+mboundstates.mod : BoundStates.F90 BoundStates.o $(SRCDIR)/NEGF/const2.h mtypes.mod mmatrixutil.mod mconstants.mod mmpi_negf.mod negfmod.mod monboundstates.mod mselfenergies.mod menergygrid.mod
+BoundStates.o : BoundStates.F90 $(SRCDIR)/NEGF/const2.h mtypes.mod mmatrixutil.mod mconstants.mod mmpi_negf.mod negfmod.mod monboundstates.mod mselfenergies.mod menergygrid.mod
+
+mcomputeulr.mod : ComputeULR.F90 ComputeULR.o mtypes.mod negfmod.mod
+ComputeULR.o : ComputeULR.F90 mtypes.mod negfmod.mod
+
+mcurrentdistribution.mod : CurrentDistribution.F90 CurrentDistribution.o mtypes.mod mmatrixutil.mod mconstants.mod mmpi_negf.mod negfmod.mod moninterface.mod
+CurrentDistribution.o : CurrentDistribution.F90 mtypes.mod mmatrixutil.mod mconstants.mod mmpi_negf.mod negfmod.mod moninterface.mod
+
+mbfield.mod : ZeemanBfield.F90 ZeemanBfield.o mtypes.mod mconstants.mod
+ZeemanBfield.o : ZeemanBfield.F90 mtypes.mod mconstants.mod
+
+mimpuritysolver.mod : empty_subs.F90 empty_subs.o mtypes.mod mconstants.mod
+empty_subs.o : empty_subs.F90 mtypes.mod mconstants.mod
+
+loe.o : loe.F90 mtypes.mod sigma.mod parallel.mod mmatrixutil.mod precision.mod mmpi_negf.mod negfmod.mod msigmamethod1.mod menergygrid.mod
+
+mgutenberg.mod : Gutenberg.F90 Gutenberg.o mtypes.mod mconstants.mod
+Gutenberg.o : Gutenberg.F90 mtypes.mod mconstants.mod
+
+minverse.mod : Inverse.F90 Inverse.o mtypes.mod mconstants.mod mmatrixutil.mod
+Inverse.o : Inverse.F90 mtypes.mod mconstants.mod mmatrixutil.mod
+
+monboundstates.mod : ON_Boundstates.F90 ON_Boundstates.o mtypes.mod mconstants.mod negfmod.mod mmatrixutil.mod
+ON_Boundstates.o : ON_Boundstates.F90 mtypes.mod mconstants.mod negfmod.mod mmatrixutil.mod
+
+moninterface.mod : ON_Interface.F90 ON_Interface.o mtypes.mod minverse.mod mmatrixutil.mod mconstants.mod mgutenberg.mod mpartition.mod mmpi_negf.mod negfmod.mod
+ON_Interface.o : ON_Interface.F90 mtypes.mod minverse.mod mmatrixutil.mod mconstants.mod mgutenberg.mod mpartition.mod mmpi_negf.mod negfmod.mod
+
+mpartition.mod : Partition.F90 Partition.o mtypes.mod mmatrixutil.mod museful.mod mconstants.mod mgutenberg.mod mreaddata.mod negfmod.mod
+Partition.o : Partition.F90 mtypes.mod mmatrixutil.mod museful.mod mconstants.mod mgutenberg.mod mreaddata.mod negfmod.mod
+
+mreaddata.mod : ReadData.F90 ReadData.o mtypes.mod mconstants.mod mmatrixutil.mod museful.mod
+ReadData.o : ReadData.F90 mtypes.mod mconstants.mod mmatrixutil.mod museful.mod
+
+menergygrid.mod : EnergyGrid.F90 EnergyGrid.o $(SRCDIR)/NEGF/const2.h mtypes.mod sigma.mod mmatrixutil.mod mconstants.mod mmpi_negf.mod negfmod.mod moninterface.mod mselfenergies.mod global_meshvar.mod
+EnergyGrid.o : EnergyGrid.F90 $(SRCDIR)/NEGF/const2.h mtypes.mod sigma.mod mmatrixutil.mod mconstants.mod mmpi_negf.mod negfmod.mod moninterface.mod mselfenergies.mod global_meshvar.mod
+
+mconstants.mod : Constants.F90 Constants.o 
+Constants.o : Constants.F90 
+
+mmatrixutil.mod : MatrixUtil.F90 MatrixUtil.o mtypes.mod museful.mod mconstants.mod mmpi_negf.mod negfmod.mod
+MatrixUtil.o : MatrixUtil.F90 mtypes.mod museful.mod mconstants.mod mmpi_negf.mod negfmod.mod
+
+mmatrixutilomp.mod : MatrixUtilOMP.F90 MatrixUtilOMP.o 
+MatrixUtilOMP.o : MatrixUtilOMP.F90 
+
+MatrixUtilsSubs.o : MatrixUtilsSubs.F90 mtypes.mod negfmod.mod
+
+mtypes.mod : Types.F90 Types.o mconstants.mod
+Types.o : Types.F90 mconstants.mod
+
+museful.mod : Useful.F90 Useful.o mconstants.mod
+Useful.o : Useful.F90 mconstants.mod
+
+PDOS.o : PDOS.F90 mtypes.mod mconstants.mod mmatrixutil.mod
+
+RhoSingleLead.o : RhoSingleLead.F90 mtypes.mod mmatrixutil.mod mmpi_negf.mod negfmod.mod moninterface.mod
+
+SetBoundaryElements.o : SetBoundaryElements.F90 mtypes.mod
+
+SetBoundaryElements1.o : SetBoundaryElements1.F90 mtypes.mod negfmod.mod
+
+SetBoundaryElements2.o : SetBoundaryElements2.F90 mtypes.mod negfmod.mod sigma.mod
+
+msigmafourier.mod : SigmaFourier.F90 SigmaFourier.o mtypes.mod mcomputeulr.mod mconstants.mod negfmod.mod msigmamethod1.mod mtransmissiondecompositionremove.mod
+SigmaFourier.o : SigmaFourier.F90 mtypes.mod mcomputeulr.mod mconstants.mod negfmod.mod msigmamethod1.mod mtransmissiondecompositionremove.mod
+
+msigmamethod1.mod : SigmaMethod1.F90 SigmaMethod1.o mconstants.mod negfmod.mod mcomputeulr.mod
+SigmaMethod1.o : SigmaMethod1.F90 mconstants.mod negfmod.mod mcomputeulr.mod
+
+mtransmissiondecomposition.mod : TransmissionDecomposition.F90 TransmissionDecomposition.o mtypes.mod sigma.mod msigmafourier.mod mcomputeulr.mod mmatrixutil.mod mmpi_negf.mod negfmod.mod mtransmissiondecompositionremove.mod
+TransmissionDecomposition.o : TransmissionDecomposition.F90 mtypes.mod sigma.mod msigmafourier.mod mcomputeulr.mod mmatrixutil.mod mmpi_negf.mod negfmod.mod mtransmissiondecompositionremove.mod
+
+mtransmissiondecompositionremove.mod : TransmissionDecompositionRemove.F90 TransmissionDecompositionRemove.o mtypes.mod negfmod.mod mcomputeulr.mod
+TransmissionDecompositionRemove.o : TransmissionDecompositionRemove.F90 mtypes.mod negfmod.mod mcomputeulr.mod
+
+current.o : current.F $(SRCDIR)/NEGF/const2.h mtypes.mod negfmod.mod menergygrid.mod
+
+eigenvalues.o : eigenvalues.F negfmod.mod
+
+eiofe.o : eiofe.F 
+
+mrgrnk.o : mrgrnk.F 
+
+negfmod.mod : negfmod.F negfmod.o 
+negfmod.o : negfmod.F 
+
+noise_svd.o : noise_svd.F negfmod.mod
+
+rhoG_reduce.o : rhoG_reduce.F mtypes.mod negfmod.mod mmpi_negf.mod
+
+sigma.mod : sigma.F sigma.o 
+sigma.o : sigma.F 
+
+sorthalf.o : sorthalf.f 
+
+transm.o : transm.F90 mtypes.mod mtransmissiondecomposition.mod sigma.mod mmatrixutil.mod mconstants.mod mimpuritysolver.mod precision.mod mmpi_negf.mod mcurrentdistribution.mod negfmod.mod negfcoop.mod moninterface.mod msigmamethod1.mod menergygrid.mod
+
+writematrix.o : writematrix.F negfmod.mod atmfuncs.mod
+
+writesigmagf.o : writesigmagf.F 
+
+gaucheb.o : gaucheb.f 
+
+gauleg.o : gauleg.f 
+
+precision.mod : precision.f precision.o 
+precision.o : precision.f 
+
+sys.mod : sys.f sys.o 
+sys.o : sys.f 
+
+atomlist.mod : atomlist.f atomlist.o 
+atomlist.o : atomlist.f 
+
+ionew.mod : ionew.F ionew.o 
+ionew.o : ionew.F 
+
+io.o : io.f 
+
+f77flush.o : f77flush.f 
+
+parallel.mod : parallel.f parallel.o 
+parallel.o : parallel.f 
+
+memory.o : memory.F 
+
+paste.o : paste.f 
+
+atmfuncs.mod : atmfuncs.f atmfuncs.o 
+atmfuncs.o : atmfuncs.f 
+
+leqi.o : leqi.f 
+
+timer.o : timer.F 
+
+scissoroperator.mod : scissor.F90 scissor.o mtypes.mod
+scissor.o : scissor.F90 mtypes.mod
+
+fdf.mod : fdf.f fdf.o 
+fdf.o : fdf.f 
+
+mio_sxdhe.mod : IO_SXDHE.F90 IO_SXDHE.o mtypes.mod parallel.mod ionew.mod mmatrixutil.mod mpi_siesta.mod precision.mod mmpi_negf.mod
+IO_SXDHE.o : IO_SXDHE.F90 mtypes.mod parallel.mod ionew.mod mmatrixutil.mod mpi_siesta.mod precision.mod mmpi_negf.mod
+
+Stop_Negf.o : Stop_Negf.F90 mpi_siesta.mod negfmod.mod mmpi_negf.mod
+
+emtg.o : emtg.F mtypes.mod set_rhobd.mod mmatrixutil.mod sys.mod precision.mod mmpi_negf.mod scissoroperator.mod mcurrdisttotal.mod negfmod.mod mnegf_interface.mod
+
+mnegf_interface.mod : Negf_Interface.F90 Negf_Interface.o mtypes.mod set_rhobd.mod mio_sxdhe.mod parallel.mod mmatrixutil.mod mconstants.mod scissoroperator.mod mcurrdisttotal.mod mmpi_negf.mod negfmod.mod
+Negf_Interface.o : Negf_Interface.F90 mtypes.mod set_rhobd.mod mio_sxdhe.mod parallel.mod mmatrixutil.mod mconstants.mod scissoroperator.mod mcurrdisttotal.mod mmpi_negf.mod negfmod.mod
+
+convertmatrix_NEGFSerialK.o : convertmatrix_NEGFSerialK.F90 mtypes.mod negfmod.mod mmatrixutil.mod mmpi_negf.mod
+
+convertmatrix_NEGFSerial.o : convertmatrix_NEGFSerial.F90 mtypes.mod parallel.mod mmatrixutil.mod mmpi_negf.mod negfmod.mod
+
+convertmatrix_NEGFParallel.o : convertmatrix_NEGFParallel.F90 mtypes.mod parallel.mod mmatrixutil.mod mmpi_negf.mod
+
+convertmatrix_BaseParallelK.o : convertmatrix_BaseParallelK.F90 mtypes.mod parallel.mod mmatrixutil.mod mmpi_negf.mod negfmod.mod
+
+convertmatrix.o : convertmatrix.F90 mtypes.mod mmatrixutil.mod mmpi_negf.mod
+
+set_rhobd.mod : boundary_elements.F boundary_elements.o negfmod.mod parallel.mod mmpi_negf.mod
+boundary_elements.o : boundary_elements.F negfmod.mod parallel.mod mmpi_negf.mod
+
+RhoPartialKNEGFToRho.o : RhoPartialKNEGFToRho.F90 mtypes.mod parallel.mod mmpi_negf.mod
+
+RhoNEGFToRhoImaginary.o : RhoNEGFToRhoImaginary.F90 mtypes.mod parallel.mod mmpi_negf.mod
+
+RhoNEGFToRho.o : RhoNEGFToRho.F90 mtypes.mod parallel.mod mmpi_negf.mod
+
+RhoNEGFKToRho.o : RhoNEGFKToRho.F90 mtypes.mod negfmod.mod mmpi_negf.mod
+
+MergeRhoK.o : MergeRhoK.F90 mtypes.mod mmatrixutil.mod mmpi_negf.mod
+
+mcurrdisttotal.mod : CurrentDistributionMatrix.F90 CurrentDistributionMatrix.o mtypes.mod parallel.mod mmatrixutil.mod mconstants.mod mmpi_negf.mod negfmod.mod
+CurrentDistributionMatrix.o : CurrentDistributionMatrix.F90 mtypes.mod parallel.mod mmatrixutil.mod mconstants.mod mmpi_negf.mod negfmod.mod
+
+XML_EMPDOS.o : XML_EMPDOS.F90 negfmod.mod atmfuncs.mod
+
+global_meshvar.mod : meshvars.F meshvars.o 
+meshvars.o : meshvars.F 
+
+mmpi_negf.mod : mpi_negf.F90 mpi_negf.o mpi_siesta.mod
+mpi_negf.o : mpi_negf.F90 mpi_siesta.mod
+
+read_efbs.o : read_efbs.F precision.mod mmpi_negf.mod
+
+rotateDM.o : rotateDM.F90 mconstants.mod negfmod.mod parallel.mod mmpi_negf.mod

@@ -1,0 +1,121 @@
+From 5d92f3800aaf21a96c2ac10c44c47b88c4ab6ceb Mon Sep 17 00:00:00 2001
+From: Sergey Chulkov <schulkov@lincoln.ac.uk>
+Date: Fri, 8 Apr 2022 15:31:18 +0100
+Subject: [PATCH] Disable writing to arbitrary file units
+
+---
+ src/NEGF/EnergyGrid.F90                       |  4 +-
+ src/NEGF/SigmaFourier.F90                     |  2 +-
+ src/NEGF/SigmaMethod1.F90                     |  2 +-
+ .../CurrentDistributionMatrix.F90             | 40 +++++++++----------
+ 4 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/src/NEGF/EnergyGrid.F90 b/src/NEGF/EnergyGrid.F90
+index 5cf8093..9479870 100644
+--- a/src/NEGF/EnergyGrid.F90
++++ b/src/NEGF/EnergyGrid.F90
+@@ -1249,7 +1249,7 @@ module mEnergyGrid
+ 
+       nl=ERealGrid%leadsTotalDim(1)
+       nr=ERealGrid%leadsTotalDim(2)
+-      write(12347,*)"eneindex0=",Nenerg_div_start,Nenerg_div_end,nl,nr,n1
++!     write(12347,*)"eneindex0=",Nenerg_div_start,Nenerg_div_end,nl,nr,n1
+ !---------find energy mesh iteratively--------------------------
+       call recursive_energygrid(N1,NL,NR,NSPIN, IDepth,isize,Delta,V,dE,Nenerg_div_start,  Nenerg_div_end,Nenerg_new,Nenerg_total, ik,deltaimag, Nenerg_pernode,Energyranges,critam,hgeneral,sgeneral,storesigmai,LeadsVoltageShift,nleadslr)
+ 
+@@ -1413,7 +1413,7 @@ module mEnergyGrid
+ 
+           call AllocateMatrixGeneral(n1,n1,nnz,gfmattype,gfmat, "adaptivegrid", io)
+           
+-         write(12347,*)"eneindex=",i,ei,Nenerg_div_start,Nenerg_div_end,nl,nr,n1
++!        write(12347,*)"eneindex=",i,ei,Nenerg_div_start,Nenerg_div_end,nl,nr,n1
+ 
+          call setgfelementsgeneral_nc(Ei+zi*Delta,nspin,ispin,gfmat,nnz,n1,nl,nr, ERealGrid%sigma(1,i,ispin,1)%sigma, ERealGrid%sigma(2,i,ispin,1)%sigma,hgeneral,sgeneral)
+ 
+diff --git a/src/NEGF/SigmaFourier.F90 b/src/NEGF/SigmaFourier.F90
+index fe20668..a4e5c12 100644
+--- a/src/NEGF/SigmaFourier.F90
++++ b/src/NEGF/SigmaFourier.F90
+@@ -366,7 +366,7 @@ module mSigmaFourier
+ !    enddo
+  
+ 
+-    write(12347,*)"maxdhinout=",maxval(abs(h0-h02)),maxval(abs(h1-h12)),maxval(abs(s0-s02)),maxval(abs(s1-s12))
++!   write(12347,*)"maxdhinout=",maxval(abs(h0-h02)),maxval(abs(h1-h12)),maxval(abs(s0-s02)),maxval(abs(s1-s12))
+ 
+ !    do i1=1,n
+ !      do i2=1,n
+diff --git a/src/NEGF/SigmaMethod1.F90 b/src/NEGF/SigmaMethod1.F90
+index d4e54f6..2dad643 100644
+--- a/src/NEGF/SigmaMethod1.F90
++++ b/src/NEGF/SigmaMethod1.F90
+@@ -659,7 +659,7 @@ module mSigmaMethod1
+       endif
+     enddo
+ 
+-    write(12347,*)"msvd2=",DREAL(ene),m,m2,n,svdtol
++!   write(12347,*)"msvd2=",DREAL(ene),m,m2,n,svdtol
+ 
+ !    rmmax=0D0
+ !    do i=1,n
+diff --git a/src/Siesta_Interface/CurrentDistributionMatrix.F90 b/src/Siesta_Interface/CurrentDistributionMatrix.F90
+index 27d4108..7fa5024 100644
+--- a/src/Siesta_Interface/CurrentDistributionMatrix.F90
++++ b/src/Siesta_Interface/CurrentDistributionMatrix.F90
+@@ -287,17 +287,17 @@ subroutine CurrentDistributionMatrix_Vectors(Jrho,maxnh,numh,listhptr,listh,n1lo
+ 
+   dx=dx * BohrToAng
+ 
+-  if(mynode == 0) then
+-    write(12347,*)"Start of current distribution matrix for bias (eV)",v * 13.6057D0
+-    do ispin=1,NspinComplexMatrix
+-      write(12347,*)"  spin index",ispin
+-      write(12347,*)"  atom_I,atom_J,Re(jmat),Im(jmat)"
+-      call PrintMatrixCRS3VectorsDouble(jmat(ispin),dx,3,jmat(ispin)%nnz,"jmat_dx",iout)
+-      write(12347,*)
+-    enddo
+-    write(12347,*)"End of current distribution matrix for bias (eV)",v * 13.6057D0
+-    write(12347,*)
+-  endif
++! if(mynode == 0) then
++!   write(12347,*)"Start of current distribution matrix for bias (eV)",v * 13.6057D0
++!   do ispin=1,NspinComplexMatrix
++!     write(12347,*)"  spin index",ispin
++!     write(12347,*)"  atom_I,atom_J,Re(jmat),Im(jmat)"
++!     call PrintMatrixCRS3VectorsDouble(jmat(ispin),dx,3,jmat(ispin)%nnz,"jmat_dx",iout)
++!     write(12347,*)
++!   enddo
++!   write(12347,*)"End of current distribution matrix for bias (eV)",v * 13.6057D0
++!   write(12347,*)
++! endif
+ 
+ 
+   deallocate(nelerow,nelenz,listj,listjval)
+@@ -326,15 +326,15 @@ subroutine CurrentDistributionMatrix_Vectors(Jrho,maxnh,numh,listhptr,listh,n1lo
+       enddo
+     enddo
+ 
+-    write(12347,*)"Start of current distribution vectors for bias (eV)",v * 13.6057D0
+-    do ispin=1,NspinComplexMatrix
+-      write(12347,*)"  spin index",ispin
+-      write(12347,*)"  atom_I,current_x,current_y,current_z"
+-      do ii=1,jmat(ispin)%iRows
+-        write(12347,*)"current_vector=",ii,Currdx(ispin,1,ii),Currdx(ispin,2,ii),Currdx(ispin,3,ii)
+-      enddo
+-    enddo
+-    write(12347,*)"End of current distribution vectors for bias (eV)",v * 13.6057D0
++!   write(12347,*)"Start of current distribution vectors for bias (eV)",v * 13.6057D0
++!   do ispin=1,NspinComplexMatrix
++!     write(12347,*)"  spin index",ispin
++!     write(12347,*)"  atom_I,current_x,current_y,current_z"
++!     do ii=1,jmat(ispin)%iRows
++!       write(12347,*)"current_vector=",ii,Currdx(ispin,1,ii),Currdx(ispin,2,ii),Currdx(ispin,3,ii)
++!     enddo
++!   enddo
++!   write(12347,*)"End of current distribution vectors for bias (eV)",v * 13.6057D0
+ 
+     deallocate(Currdx)
+   endif
+-- 
+2.19.2
+
