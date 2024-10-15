@@ -1,3 +1,4 @@
+
 # SMEAGOL library version 1.2
 
 This library is based on unaltered SMEAGOL/SIESTA v1.2 source code.
@@ -47,3 +48,4 @@ directories respectively. The command
      make clean
 ```
 simply removes these `obj/` and `lib/` directories.
+
