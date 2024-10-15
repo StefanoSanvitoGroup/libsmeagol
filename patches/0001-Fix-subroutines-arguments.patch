@@ -1,0 +1,39 @@
+From 879862d05c3e9f78db27d58c19c55a85b67c5182 Mon Sep 17 00:00:00 2001
+From: Sergey Chulkov <schulkov@lincoln.ac.uk>
+Date: Wed, 22 Sep 2021 11:07:23 +0100
+Subject: [PATCH] Fix subroutines' arguments
+
+---
+ src/NEGF/negfk.F                        | 2 +-
+ src/Siesta_Interface/Negf_Interface.F90 | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/NEGF/negfk.F b/src/NEGF/negfk.F
+index 88f516a..daa5e3d 100644
+--- a/src/NEGF/negfk.F
++++ b/src/NEGF/negfk.F
+@@ -248,7 +248,7 @@
+      .      NspinBlocks, NspinComplexMatrix,
+      &        V,N1,NL,H0_L2,S0_L2,H1_L2,S1_L2,
+      &        NR,H0_R2,S0_R2,H1_R2,S1_R2,hgeneralp,sgeneralp,
+-     &        Set_HBoundary_Leads,Set_HLR_Zero)
++     &        Set_HBoundary_Leads,Set_HLR_Zero,HStol)
+         sgeneralp%mattype=2
+         do ispin=1,NspinComplexMatrix
+           hgeneralp(ispin)%mattype=2
+diff --git a/src/Siesta_Interface/Negf_Interface.F90 b/src/Siesta_Interface/Negf_Interface.F90
+index 4cf4aa5..94ad79f 100644
+--- a/src/Siesta_Interface/Negf_Interface.F90
++++ b/src/Siesta_Interface/Negf_Interface.F90
+@@ -68,7 +68,7 @@ MODULE mNegf_Interface
+   real(kdp),intent(in) :: S(maxnh)
+   real(kdp),intent(inout) :: DM(maxnh,NspinRealInputMatrix)
+   real(kdp),intent(inout) :: Omega(maxnh,NspinRealInputMatrix)
+-  real(kdp),intent(in) :: xij(3,NspinRealInputMatrix)
++  real(kdp),intent(in) :: xij(3,maxnh)
+   real(kdp),intent(in) :: kpoint(3,nkpts),weight_k(nkpts)
+   real(kdp),intent(in) :: Vb
+   integer, intent(in)  :: na_u,na_s
+-- 
+2.19.2
+
