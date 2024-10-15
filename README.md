@@ -1,1 +1,1 @@
-# smegol
+# libsmeagol
