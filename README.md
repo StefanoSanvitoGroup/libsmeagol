@@ -50,7 +50,7 @@ directories respectively. The command
 simply removes these `obj/` and `lib/` directories.
 
 # Citation
-
+```
 @article{rocha2005towards,
   title={Towards molecular spintronics},
   author={Rocha, Alexandre R and Garcia-Suarez, Victor M and Bailey, Steve W and Lambert, Colin J and Ferrer, Jaime and Sanvito, Stefano},
@@ -61,3 +61,4 @@ simply removes these `obj/` and `lib/` directories.
   year={2005},
   publisher={Nature Publishing Group UK London}
 }
+```
